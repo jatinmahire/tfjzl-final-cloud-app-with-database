@@ -137,7 +137,7 @@ def submit(request, course_id):
         return HttpResponseBadRequest('Selected choices must belong to this course.')
     submission = Submission.objects.create(enrollment=enrollment)
     submission.choices.set(choices)
-    return HttpResponseRedirect(reverse('onlinecourse:exam_result', args=(course.id, submission.id)))
+    return HttpResponseRedirect(reverse('onlinecourse:show_exam_result', args=(course.id, submission.id)))
 
 
 @login_required(login_url='onlinecourse:login')
@@ -148,11 +148,11 @@ def show_exam_result(request, course_id, submission_id):
     choices = submission.choices.all()
     selected_ids = set(choices.values_list('id', flat=True))
     total_score = 0
-    maximum_score = 0
+    possible_score = 0
     results = []
     for question in course.question_set.prefetch_related('choice_set').all():
         correct = question.is_get_score(selected_ids)
-        maximum_score += question.grade
+        possible_score += question.grade
         if correct:
             total_score += question.grade
         results.append({
@@ -161,9 +161,10 @@ def show_exam_result(request, course_id, submission_id):
             'answers': [{'choice': choice, 'selected': choice.id in selected_ids}
                         for choice in question.choice_set.all()],
         })
-    grade = round(100 * total_score / maximum_score) if maximum_score else 0
+    grade = round(100 * total_score / possible_score) if possible_score else 0
     return render(request, 'onlinecourse/exam_result_bootstrap.html', {
         'course': course, 'submission': submission, 'choices': choices,
-        'grade': grade, 'total_score': total_score, 'maximum_score': maximum_score,
+        'grade': grade, 'total_score': total_score, 'possible_score': possible_score,
+        'possible': possible_score, 'selected_ids': selected_ids,
         'passed': grade > 80, 'results': results,
     })

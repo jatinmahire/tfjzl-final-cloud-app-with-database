@@ -33,7 +33,7 @@ class Command(BaseCommand):
             ('Is Django a Python framework?', [('Yes', True), ('No', False)]),
             ('Which Django features are used by this course app?', [('Models define database data', True), ('Templates render HTML pages', True), ('Migrations replace authentication', False)]),
         ]:
-            question, _ = Question.objects.update_or_create(course=course, content=content, defaults={'grade': 50})
+            question, _ = Question.objects.update_or_create(course=course, question_text=content, defaults={'grade': 50})
             for label, correct in answers:
-                Choice.objects.update_or_create(question=question, content=label, defaults={'is_correct': correct})
+                Choice.objects.update_or_create(question=question, choice_text=label, defaults={'is_correct': correct})
         self.stdout.write(self.style.SUCCESS(f'Demo course {course.pk} and user jatinmahire are ready.'))

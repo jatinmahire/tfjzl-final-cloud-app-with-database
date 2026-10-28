@@ -1,6 +1,18 @@
-{% extends 'onlinecourse/assessment_base.html' %}
-{% block title %}{{ course.name }} | Online Course App{% endblock %}
-{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ course.name }} | Online Course App</title>
+  <link rel="stylesheet" href="{% static 'onlinecourse/bootstrap.min.css' %}">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-dark bg-dark px-4 py-3">
+  <a class="navbar-brand" href="{% url 'onlinecourse:index' %}">Online Course App</a>
+  {% if user.is_authenticated %}<span class="text-white">{{ user.first_name }} ({{ user.username }})</span>{% endif %}
+</nav>
+<main class="container my-4">
 <h1>{{ course.name }}</h1><p class="lead">{{ course.description }}</p>
 {% for lesson in course.lesson_set.all %}
 <article class="card mb-3">
@@ -15,11 +27,11 @@
     {% csrf_token %}
     {% for question in course.question_set.all %}
     <fieldset class="border rounded p-3 mb-3">
-      <legend class="h5 w-auto px-2">{{ forloop.counter }}. {{ question.content }} ({{ question.grade }} points)</legend>
+      <legend class="h5 w-auto px-2">{{ forloop.counter }}. {{ question.question_text }} ({{ question.grade }} points)</legend>
       {% for choice in question.choice_set.all %}
       <div class="form-check mb-2">
         <input class="form-check-input" type="checkbox" name="choice_{{ question.id }}" value="{{ choice.id }}" id="choice_{{ choice.id }}">
-        <label class="form-check-label" for="choice_{{ choice.id }}">{{ choice.content }}</label>
+        <label class="form-check-label" for="choice_{{ choice.id }}">{{ choice.choice_text }}</label>
       </div>
       {% endfor %}
     </fieldset>
@@ -30,4 +42,6 @@
 {% elif user.is_authenticated %}
 <a class="btn btn-primary" href="{% url 'onlinecourse:enroll' course.id %}">Enroll to take the exam</a>
 {% else %}<a class="btn btn-primary" href="{% url 'onlinecourse:login' %}">Log in to enroll</a>{% endif %}
-{% endblock %}
+</main>
+</body>
+</html>
