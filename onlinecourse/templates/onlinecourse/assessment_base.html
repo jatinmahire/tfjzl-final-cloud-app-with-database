@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Online Course App{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'onlinecourse/bootstrap.min.css' %}">
+</head><body class="bg-light">
+<nav class="navbar navbar-dark bg-dark px-4 py-3">
+  <a class="navbar-brand" href="{% url 'onlinecourse:index' %}">Online Course App</a>
+  <div class="text-white">
+    {% if user.is_authenticated %}{{ user.first_name }} ({{ user.username }})
+    <a class="text-white ml-3" href="{% url 'onlinecourse:logout' %}">Logout</a>
+    {% else %}<a class="text-white" href="{% url 'onlinecourse:login' %}">Login</a>{% endif %}
+  </div>
+</nav>
+<main class="container my-4">{% block content %}{% endblock %}</main>
+</body></html>

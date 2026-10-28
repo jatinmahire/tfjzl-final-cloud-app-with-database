@@ -95,9 +95,34 @@ class Enrollment(models.Model):
     rating = models.FloatField(default=5.0)
 
 
-# One enrollment could have multiple submission
-# One submission could have multiple choices
-# One choice could belong to multiple submissions
-#class Submission(models.Model):
-#    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
-#    choices = models.ManyToManyField(Choice)
+
+class Question(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    content = models.CharField(max_length=200)
+    grade = models.PositiveIntegerField(default=50)
+
+    def __str__(self):
+        return "Question: " + self.content
+
+    def is_get_score(self, selected_ids):
+        """Award credit only for the exact, nonempty set of correct answers."""
+        correct = set(self.choice_set.filter(is_correct=True).values_list('id', flat=True))
+        selected = set(self.choice_set.filter(id__in=selected_ids).values_list('id', flat=True))
+        return bool(correct) and selected == correct
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    content = models.CharField(max_length=200)
+    is_correct = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.content
+
+
+class Submission(models.Model):
+    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
+    choices = models.ManyToManyField(Choice, blank=True)
+
+    def __str__(self):
+        return f"Submission {self.pk} by {self.enrollment.user.username}"
