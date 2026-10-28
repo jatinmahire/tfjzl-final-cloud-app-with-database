@@ -1,3 +1,13 @@
+"""Django administration for course content and assessments.
+
+Repository: https://github.com/jatinmahire/tfjzl-final-cloud-app-with-database
+Public source: https://github.com/jatinmahire/tfjzl-final-cloud-app-with-database/blob/main/onlinecourse/admin.py
+
+The seven model imports below are registered with the Django admin site.
+QuestionInline edits course questions, ChoiceInline edits question answers,
+QuestionAdmin configures question editing, and LessonAdmin lists lessons.
+"""
+
 from django.contrib import admin
 from .models import Course, Lesson, Instructor, Learner, Question, Choice, Submission
 

@@ -1,4 +1,15 @@
 {% load static %}
+{% comment %}
+Course detail template for the Online Course application.
+Public source: https://github.com/jatinmahire/tfjzl-final-cloud-app-with-database/blob/main/onlinecourse/templates/onlinecourse/course_details_bootstrap.html
+
+Template context: course is a Course instance; user is the current user.
+The page title and heading display {{ course.name }}.
+Related lessons are rendered with {% for lesson in course.lesson_set.all %},
+using {{ lesson.title }}, {{ lesson.order }}, and {{ lesson.content }}.
+The Bootstrap stylesheet is loaded from onlinecourse/bootstrap.min.css.
+Layout uses Bootstrap container, card, card-header, card-body, and btn classes.
+{% endcomment %}
 <!DOCTYPE html>
 <html lang="en">
 <head>

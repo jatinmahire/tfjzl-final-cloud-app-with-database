@@ -1,3 +1,12 @@
+"""URL configuration for the Online Course application.
+
+Repository: https://github.com/jatinmahire/tfjzl-final-cloud-app-with-database
+Public source: https://github.com/jatinmahire/tfjzl-final-cloud-app-with-database/blob/main/onlinecourse/urls.py
+
+The submit route saves an enrolled learner's exam answers. The
+show_exam_result route displays the learner's saved assessment results.
+"""
+
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
